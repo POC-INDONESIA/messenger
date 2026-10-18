@@ -439,10 +439,6 @@ class ChatController extends State<ChatPageWithRoom>
     _loadDraft();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _shareItems();
-      _checkMatrixRtcCallSupport();
-      if (widget.action == 'call') {
-        Matrix.of(context).activeCallRoomId.value = room.id;
-      }
     });
     web.window.addEventListener('paste', _handleClipboardFilePasteWeb);
 
@@ -469,18 +465,6 @@ class ChatController extends State<ChatPageWithRoom>
         : '';
     WidgetsBinding.instance.addObserver(this);
     _tryLoadTimeline();
-  }
-
-  Future<void> _checkMatrixRtcCallSupport() async {
-    try {
-      final urls = await room.client.getLiveKitServiceUrls();
-      if (urls.isEmpty) return;
-      setState(() {
-        supportLiveKitCalls = true;
-      });
-    } catch (e) {
-      Logs().d('Unable to check MatrixRTC call support', e);
-    }
   }
 
   final Set<String> expandedEventIds = {};
@@ -1656,12 +1640,6 @@ class ChatController extends State<ChatPageWithRoom>
     replyEvent = null;
     editEvent = null;
   });
-
-  void startOrJoinVideoCall() {
-    Matrix.of(context).activeCallRoomId.value = room.id;
-  }
-
-  bool supportLiveKitCalls = false;
 
   Future<void> _cancelEditWithConfirmation() async {
     final originalText = editEvent!
