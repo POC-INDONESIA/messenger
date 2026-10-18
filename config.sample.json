@@ -1,7 +1,7 @@
 {
   "applicationName": "POCIND MESSENGER",
-  "defaultHomeserver": "matrix.org",
-  "presetHomeserver": "",
+  "defaultHomeserver": "matrix.pocindonesia.com",
+  "presetHomeserver": "matrix.pocindonesia.com",
   "welcomeText": "",
   "privacyUrl": "https://github.com/krille-chan/fluffychat/blob/main/PRIVACY.md",
   "audioRecordingNumChannels": 1,
