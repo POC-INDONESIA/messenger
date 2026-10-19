@@ -70,4 +70,9 @@ abstract class AppConfig {
   static const String pushHelperCrashReportKey = 'push_helper_crash_report';
 
   static const String vodozemacVersion = '0.8.1';
+
+  // E2EE dimatikan: server menolak m.room.encryption (komunitas terbuka,
+  // grup tidak dienkripsi & bisa diaudit). Tanpa init vodozemac/olm,
+  // client tidak generate key, tidak ada banner backup, langsung jalan.
+  static const bool enableE2ee = false;
 }

@@ -76,7 +76,7 @@ Future<void> notificationTapBackground(
     AppConfig.pushIsolatePortName,
   );
 
-  if (!_vodInitialized) {
+  if (AppConfig.enableE2ee && !_vodInitialized) {
     await vod.init();
     _vodInitialized = true;
   }

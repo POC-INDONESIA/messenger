@@ -69,7 +69,7 @@ void main(List<String> args) => runZonedGuarded(() async {
 
   kEnableMatrixSdkBenchmarks = AppSettings.benchmarksInLogs.value;
 
-  if (!_vodozemacInitialized) {
+  if (AppConfig.enableE2ee && !_vodozemacInitialized) {
     await vod.init(
       wasmPath: './assets/assets/vodozemac/${AppConfig.vodozemacVersion}/',
     );
