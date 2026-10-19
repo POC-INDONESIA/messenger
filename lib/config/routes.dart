@@ -5,6 +5,7 @@
 
 import 'dart:async';
 
+import 'package:fluffychat/config/app_config.dart';
 import 'package:fluffychat/config/themes.dart';
 import 'package:fluffychat/pages/archive/archive.dart';
 import 'package:fluffychat/pages/bootstrap/bootstrap_page.dart';
@@ -58,6 +59,17 @@ abstract class AppRoutes {
       ? null
       : '/home';
 
+  /// E2EE dimatikan (AppConfig.enableE2ee=false): lewati halaman setup
+  /// passphrase/backup key, langsung ke chat list. Mencegah olm error
+  /// karena vodozemac tidak pernah di-init.
+  static FutureOr<String?> backupRedirect(
+    BuildContext context,
+    GoRouterState state,
+  ) {
+    if (!AppConfig.enableE2ee) return '/rooms';
+    return loggedOutRedirect(context, state);
+  }
+
   AppRoutes();
 
   static final List<RouteBase> routes = [
@@ -109,7 +121,7 @@ abstract class AppRoutes {
     ),
     GoRoute(
       path: '/backup',
-      redirect: loggedOutRedirect,
+      redirect: backupRedirect,
       pageBuilder: (context, state) => defaultPageBuilder(
         context,
         state,
