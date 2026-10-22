@@ -38,6 +38,9 @@ customization must be reachable through standard `/_matrix/client/v3/login` flow
   "remove upstream references", these are the places to look.
 - Login UI is upstream-identical: username field accepts MXID, email or phone. Do not add extra
   fields unless the modified server actually requires them.
+- SSO provider selection is skipped when `m.login.sso` advertises exactly one
+  `identity_providers` entry: the flow goes straight to
+  `/_matrix/client/v3/login/sso/redirect/{id}` so "Masuk" opens the IdP page in one tap.
 - Use `L10n.of(context)` for every user-visible string; add keys to `lib/l10n/intl_en.arb` (and
   `intl_id.arb` for Indonesian) plus `flutter gen-l10n`. Never edit `lib/l10n/l10n*.dart`.
 - Material widgets come from `package:material_ui/material_ui.dart`.

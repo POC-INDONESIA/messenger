@@ -36,8 +36,10 @@ Future<void> ssoLoginFlow(
           )
           .toList();
 
-  final provider = ssoProviders == null
+  final provider = ssoProviders == null || ssoProviders.isEmpty
       ? null
+      : ssoProviders.length == 1
+      ? ssoProviders.single
       : await showModalActionPopup(
           context: context,
           title: L10n.of(context).logInTo(client.homeserver!.host),
