@@ -126,7 +126,7 @@ slots:
   dbus-svc:
     interface: dbus
     bus: session
-    name: chat.fluffy.fluffychat
+    name: com.pocindonesia.chat
 
 apps:
   fluffychat:

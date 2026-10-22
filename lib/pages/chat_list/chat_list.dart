@@ -177,7 +177,7 @@ class ChatListController extends State<ChatList>
   QueryPublicRoomsResponse? roomSearchResult;
 
   bool isSearching = false;
-  static const String _serverStoreNamespace = 'im.fluffychat.search.server';
+  static const String _serverStoreNamespace = 'im.pocindchat.search.server';
 
   Future<void> setServer() async {
     final matrix = Matrix.of(context);

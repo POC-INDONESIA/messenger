@@ -4,5 +4,9 @@
       "source.organizeImports"
     ]
   },
-  "dart.flutterSdkPath": ".fvm/versions/3.47.7"
+  "dart.flutterSdkPath": ".fvm/versions/3.47.7",
+  "chat.tools.terminal.autoApprove": {
+    "flutter": true,
+    "dart": true
+  }
 }

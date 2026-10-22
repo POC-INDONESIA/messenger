@@ -2952,7 +2952,7 @@ voice messages.
 - feat: New settings design
 - feat: Nicer images, stickers and videos
 - feat: nicer loading bar
-- feat: Open im.fluffychat uris
+- feat: Open im.pocindchat uris
 - feat: Redesign multiaccounts and spaces
 - feat: Redesign start page
 - feat: Send reactions to multiple events

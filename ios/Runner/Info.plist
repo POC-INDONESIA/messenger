@@ -4,7 +4,7 @@
 <dict>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
-		<string>im.fluffychat.app</string>
+		<string>im.pocindchat.app</string>
 	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
@@ -32,11 +32,11 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>im.fluffychat.app.uris</string>
+			<string>im.pocindchat.app.uris</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>ShareMedia-$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-				<string>im.fluffychat</string>
+				<string>im.pocindchat</string>
 				<string>matrix</string>
 			</array>
 		</dict>

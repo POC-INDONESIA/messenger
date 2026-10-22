@@ -82,14 +82,14 @@ class NotificationService: UNNotificationServiceExtension {
 
         // Create database path:
         guard let containerPath = FileManager.default.containerURL(
-                forSecurityApplicationGroupIdentifier: "group.im.fluffychat.app"
+                forSecurityApplicationGroupIdentifier: "group.im.pocindchat.app"
             ) else {
                 os_log("[FluffyChatPushHelper] Unable to get container path!")
                 contentHandler(bestAttemptContent)
                 return
         }
         let databasePath = containerPath.appendingPathComponent("\(clientName).sqlite").path
-        
+
         // Open database:
         let database: SqlCipherDatabase
         do {
@@ -134,7 +134,7 @@ class NotificationService: UNNotificationServiceExtension {
             bestAttemptContent.title = roomName
             bestAttemptContent.userInfo["room_name"] = roomName
         }
-        
+
         if let roomAvatarUrl = roomAvatarUrl {
             bestAttemptContent.userInfo["room_avatar"] = roomAvatarUrl
             do {
@@ -165,7 +165,7 @@ class NotificationService: UNNotificationServiceExtension {
             kSecAttrService as String: "flutter_secure_storage_service",
             kSecAttrAccount as String: "database_password",
             kSecReturnData as String: true,
-            kSecAttrAccessGroup as String: "group.im.fluffychat.app",
+            kSecAttrAccessGroup as String: "group.im.pocindchat.app",
         ]
 
         var item: CFTypeRef?
@@ -177,7 +177,7 @@ class NotificationService: UNNotificationServiceExtension {
         else {
             throw DatabaseKeyError.keychain(status)
         }
-        
+
         return try SqlCipherDatabase.open(path: path, key: key)
     }
 
@@ -212,7 +212,7 @@ class NotificationService: UNNotificationServiceExtension {
         ) else {
             return nil
         }
-        
+
         let roomAvatarEvent = try? JSONDecoder().decode(
             RoomAvatarEventJson.self,
             from: event.data(using: .utf8)!
@@ -222,7 +222,7 @@ class NotificationService: UNNotificationServiceExtension {
         }
         return nil
     }
-    
+
     func getRoomNameFromDatabase(database: SqlCipherDatabase, roomId: String)
         -> String?
     {
@@ -236,7 +236,7 @@ class NotificationService: UNNotificationServiceExtension {
         ) else {
             return nil
         }
-        
+
         let roomNameEvent = try? JSONDecoder().decode(
             RoomNameEventJson.self,
             from: event.data(using: .utf8)!
@@ -256,7 +256,7 @@ class NotificationService: UNNotificationServiceExtension {
         ) else {
             return nil
         }
-        
+
         let room = try? JSONDecoder().decode(
             RoomJson.self,
             from: event.data(using: .utf8)!
@@ -270,20 +270,20 @@ class NotificationService: UNNotificationServiceExtension {
         }.compactMap { $0 }
         return heroes
     }
-    
+
     func downloadAttachment(url: String, containerPath: URL) throws -> UNNotificationAttachment {
         let downloadDirectory = containerPath.appendingPathComponent("fluffychat_download_cache")
-        
+
         let mxcComponents = url.replacingOccurrences(of: "mxc://", with: "").split(separator: "/")
         guard mxcComponents.count == 2 else {
             throw NSError(domain: "FamedlyPushHelper", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid MXC URL format"])
         }
-        
+
         let host = String(mxcComponents[0]).replacingOccurrences(of: ".", with: "_")
         let mediaId = String(mxcComponents[1])
         let fileName = "notification_\(host)_\(mediaId).jpg"
         let fileUrl = downloadDirectory.appendingPathComponent(fileName)
-        
+
         return try UNNotificationAttachment(identifier: "image", url: fileUrl, options: nil)
     }
 }
