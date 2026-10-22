@@ -986,7 +986,7 @@
         "type": "String",
         "placeholders": {}
     },
-    "inviteText": "{username} invited you to FluffyChat.\n1. Visit fluffychat.im and install the app \n2. Sign up or sign in \n3. Open the invite link: \n {link}",
+    "inviteText": "{username} invited you to POCIND MESSENGER.\n1. Visit POCIND MESSENGER.im and install the app \n2. Sign up or sign in \n3. Open the invite link: \n {link}",
     "@inviteText": {
         "type": "String",
         "placeholders": {
@@ -1147,7 +1147,7 @@
         "type": "String",
         "placeholders": {}
     },
-    "newMessageInFluffyChat": "💬 New message in FluffyChat",
+    "newMessageInFluffyChat": "💬 New message in POCIND MESSENGER",
     "@newMessageInFluffyChat": {
         "type": "String",
         "placeholders": {}
@@ -2574,8 +2574,8 @@
     "hideRoomsInSpaces": "Hide rooms that are in a space",
     "possibleByYou": "This release was only possible thanks to your support. FluffyChat remains free, open-source, and entirely community-driven.",
     "showThumbnailsInTimeline": "Show thumbnails of images and videos",
-    "appSubtitle": "Secure [matrix] Communication",
-    "appDescription": "Communicate encrypted over the decentralized [matrix] network in an easy and accessible way for everyone.",
+    "appSubtitle": "Community Communication",
+    "appDescription": "Communication via the POCIND MESSENGER application is not encrypted; all conversations can be audited or intercepted. The application is intended solely for community communication—please use it wisely.",
     "interactiveVerification": "Interactive verification",
     "interactiveVerificationDescription": "If you are next to each other or communicate via a secure channel then you can verify all devices at once by comparing a security number or emojis.",
     "countUnverifiedDevices": "{count} unverified devices in the chat.",
