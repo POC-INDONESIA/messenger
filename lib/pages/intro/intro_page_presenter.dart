@@ -105,12 +105,26 @@ class _IntroPagePresenterState extends State<IntroPagePresenter> {
       return;
     }
 
+    setState(() {
+      isLoading = true;
+      loggingInToHomeserver = presetHomeserver;
+    });
+
     connectToHomeserverFlow(
       PublicHomeserverData(name: presetHomeserver),
       context,
-      (snapshot) {},
+      _onLoginSnapshot,
       false,
     );
+  }
+
+  void _onLoginSnapshot(AsyncSnapshot<bool> snapshot) {
+    if (!mounted) return;
+    final isWaiting = snapshot.connectionState == ConnectionState.waiting;
+    setState(() {
+      isLoading = isWaiting;
+      if (!isWaiting) loggingInToHomeserver = null;
+    });
   }
 
   @override

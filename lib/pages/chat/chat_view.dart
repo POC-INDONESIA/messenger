@@ -22,7 +22,6 @@ import 'package:material_ui/material_ui.dart';
 import 'package:matrix/matrix.dart';
 
 import '../../utils/stream_extension.dart';
-import 'chat_emoji_picker.dart';
 import 'chat_input_row.dart';
 
 enum _EventContextAction { info, report }
@@ -44,14 +43,11 @@ class ChatView extends StatelessWidget {
     return PopScope(
       canPop:
           controller.selectedEvents.isEmpty &&
-          !controller.showEmojiPicker &&
           controller.activeThreadId == null,
       onPopInvokedWithResult: (pop, _) async {
         if (pop) return;
         if (controller.selectedEvents.isNotEmpty) {
           controller.clearSelectedEvents();
-        } else if (controller.showEmojiPicker) {
-          controller.emojiPickerAction();
         } else if (controller.activeThreadId != null) {
           controller.closeThread();
         }
@@ -471,7 +467,6 @@ class ChatView extends StatelessWidget {
                                                 children: [
                                                   ReplyDisplay(controller),
                                                   ChatInputRow(controller),
-                                                  ChatEmojiPicker(controller),
                                                 ],
                                               ),
                                       ),

@@ -374,7 +374,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.2;
-				PRODUCT_BUNDLE_IDENTIFIER = im.pocindchat.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pocindonesia.chat;
 				PRODUCT_COPYRIGHT = "Copyright © 2023 FluffyChat authors. All rights reserved.";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -508,7 +508,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.2;
-				PRODUCT_BUNDLE_IDENTIFIER = im.pocindchat.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pocindonesia.chat;
 				PRODUCT_COPYRIGHT = "Copyright © 2023 FluffyChat authors. All rights reserved.";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -535,7 +535,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.2;
-				PRODUCT_BUNDLE_IDENTIFIER = im.pocindchat.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pocindonesia.chat;
 				PRODUCT_COPYRIGHT = "Copyright © 2023 FluffyChat authors. All rights reserved.";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;

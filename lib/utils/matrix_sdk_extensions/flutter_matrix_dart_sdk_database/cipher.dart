@@ -18,7 +18,7 @@ import 'package:matrix/matrix.dart';
 const _passwordStorageKey = 'database_password';
 
 const iosOptions = IOSOptions(
-  groupId: 'group.im.pocindchat.app',
+  groupId: 'group.com.pocindonesia.chat',
   accessibility: .first_unlock,
 );
 

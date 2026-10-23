@@ -29,7 +29,7 @@ abstract class AppConfig {
       'https://ko-fi.com/post/How-to-use-end-to-end-encryption-in-FluffyChat-A5O725WDR5';
   static const String howDoIGetStickersTutorial =
       'https://ko-fi.com/post/How-to-add-a-sticker-pack-to-FluffyChat-N4N01OXATI';
-  static const String appId = 'im.pocindchat.app';
+  static const String appId = 'com.pocindonesia.chat';
   static const String appOpenUrlScheme = 'im.pocindchat';
   static const String appSsoUrlScheme = 'im.pocindchat.auth';
   // Identifies the notification activation callback on Windows. Never change!

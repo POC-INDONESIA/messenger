@@ -1,5 +1,5 @@
-app_identifier("im.pocindchat.app") # The bundle identifier of your app
-apple_id("christian-kussowski@posteo.de") # Your Apple Developer Portal username
+app_identifier("com.pocindonesia.chat") # The bundle identifier of your app
+apple_id("kang.ibnux@gmail.com") # Your Apple Developer Portal username
 
 itc_team_id("123574188") # App Store Connect Team ID
 team_id("4HV29TJN3A") # Developer Portal Team ID

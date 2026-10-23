@@ -193,8 +193,6 @@ class ChatController extends State<ChatPageWithRoom>
 
   String pendingText = '';
 
-  bool showEmojiPicker = false;
-
   String? get threadLastEventId {
     final threadId = activeThreadId;
     if (threadId == null) return null;
@@ -434,7 +432,6 @@ class ChatController extends State<ChatPageWithRoom>
     inputFocus = FocusNode(onKeyEvent: _customEnterKeyHandling);
 
     scrollController.addListener(_updateScrollController);
-    inputFocus.addListener(_inputFocusListener);
 
     _loadDraft();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -698,7 +695,6 @@ class ChatController extends State<ChatPageWithRoom>
     typingTimeout?.cancel();
     sendController.dispose();
     scrollController.dispose();
-    inputFocus.removeListener(_inputFocusListener);
     inputFocus.dispose();
     _displayChatDetailsColumn.dispose();
     web.window.removeEventListener('paste', _handleClipboardFilePasteWeb);
@@ -1017,25 +1013,6 @@ class ChatController extends State<ChatPageWithRoom>
     return;
   }
 
-  void hideEmojiPicker() {
-    setState(() => showEmojiPicker = false);
-  }
-
-  void emojiPickerAction() {
-    if (showEmojiPicker) {
-      inputFocus.requestFocus();
-    } else {
-      inputFocus.unfocus();
-    }
-    setState(() => showEmojiPicker = !showEmojiPicker);
-  }
-
-  void _inputFocusListener() {
-    if (showEmojiPicker && inputFocus.hasFocus) {
-      setState(() => showEmojiPicker = false);
-    }
-  }
-
   Future<void> sendLocationAction() async {
     await showAdaptiveDialog(
       context: context,
@@ -1057,10 +1034,7 @@ class ChatController extends State<ChatPageWithRoom>
 
   void copyEventsAction() {
     Clipboard.setData(ClipboardData(text: _getSelectedEventString()));
-    setState(() {
-      showEmojiPicker = false;
-      selectedEvents.clear();
-    });
+    setState(selectedEvents.clear);
   }
 
   Future<void> reportEventAction() async {
@@ -1085,10 +1059,7 @@ class ChatController extends State<ChatPageWithRoom>
     );
     if (result.error != null) return;
     if (!mounted) return;
-    setState(() {
-      showEmojiPicker = false;
-      selectedEvents.clear();
-    });
+    setState(selectedEvents.clear);
     scaffoldMessenger.showSnackBar(
       SnackBar(content: Text(l10n.contentHasBeenReported)),
     );
@@ -1161,10 +1132,7 @@ class ChatController extends State<ChatPageWithRoom>
         }
       },
     );
-    setState(() {
-      showEmojiPicker = false;
-      selectedEvents.clear();
-    });
+    setState(selectedEvents.clear);
   }
 
   List<Client?> get currentRoomBundle {
@@ -1329,40 +1297,7 @@ class ChatController extends State<ChatPageWithRoom>
     scrollController.jumpTo(0);
   }
 
-  void onEmojiSelected(_, Emoji? emoji) {
-    typeEmoji(emoji);
-    onInputBarChanged(sendController.text);
-  }
-
-  void typeEmoji(Emoji? emoji) {
-    if (emoji == null) return;
-    final text = sendController.text;
-    final selection = sendController.selection;
-    final start = selection.baseOffset == -1 ? 0 : selection.baseOffset;
-    final newText = sendController.text.isEmpty
-        ? emoji.emoji
-        : text.replaceRange(selection.start, selection.end, emoji.emoji);
-    sendController.value = TextEditingValue(
-      text: newText,
-      selection: TextSelection.collapsed(
-        // don't forget an UTF-8 combined emoji might have a length > 1
-        offset: start + emoji.emoji.length,
-      ),
-    );
-  }
-
-  void emojiPickerBackspace() {
-    sendController
-      ..text = sendController.text.characters.skipLast(1).toString()
-      ..selection = TextSelection.fromPosition(
-        TextPosition(offset: sendController.text.length),
-      );
-  }
-
-  void clearSelectedEvents() => setState(() {
-    selectedEvents.clear();
-    showEmojiPicker = false;
-  });
+  void clearSelectedEvents() => setState(selectedEvents.clear);
 
   void clearSingleSelectedEvent() {
     if (selectedEvents.length <= 1) {

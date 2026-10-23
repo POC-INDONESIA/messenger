@@ -80,7 +80,7 @@ Entry point `lib/main.dart` → `ClientManager.getClients()` → `FluffyChatApp`
 
 ## POCIND fork specifics (differs from upstream)
 
-- **Branding lives in** `lib/config/app_config.dart` (colors, `appId = im.pocindchat.app`,
+- **Branding lives in** `lib/config/app_config.dart` (colors, `appId = com.pocindonesia.chat`,
   schemes `im.pocindchat` / `im.pocindchat.auth`, deep link `im.pocindchat://chat/`, push app id
   `com.pocindonesia.chat`) and `lib/config/setting_keys.dart`
   (`applicationName = 'POCIND MESSENGER'`, `defaultHomeserver` / `presetHomeserver =

@@ -94,8 +94,16 @@ class IntroPage extends StatelessWidget {
                 mainAxisAlignment: .center,
                 children: [
                   CircularProgressIndicator.adaptive(),
-                  if (loggingInToHomeserver != null)
-                    Text(L10n.of(context).logInTo(loggingInToHomeserver)),
+                  if (loggingInToHomeserver != null) ...[
+                    const SizedBox(height: 24),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      child: Text(
+                        L10n.of(context).logInTo(loggingInToHomeserver),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
                 ],
               ),
             )
