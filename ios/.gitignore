@@ -31,3 +31,10 @@ build/
 !default.mode2v3
 !default.pbxuser
 !default.perspectivev3
+
+# App Store Connect API keys (never commit)
+*.p8
+
+# fastlane/gym export artifacts
+Runner.ipa
+Runner.app.dSYM.zip

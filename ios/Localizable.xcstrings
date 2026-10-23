@@ -42,6 +42,15 @@
         }
       }
     },
+    "Empty chat" : {
+
+    },
+    "FluffyChat User" : {
+
+    },
+    "New chat" : {
+
+    },
     "New message - open app to read" : {
       "comment" : "Default notification body",
       "localizations" : {

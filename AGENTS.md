@@ -96,11 +96,12 @@ Entry point `lib/main.dart` → `ClientManager.getClients()` → `FluffyChatApp`
   `/backup` redirects straight to `/rooms`, and the encryption UI/settings remain in the code but
   are non-functional. Do **not** assume crypto identity or a recovery key exists. If touching
   backup/bootstrap/verification code, verify it is unreachable first.
-- **iOS has no App Group entitlement** (`com.apple.security.application-groups` is empty because
-  `group.com.pocindonesia.chat` is not registered on the Apple developer account). The app must keep
-  working in that state: read the container via `iosAppGroupContainerPath()` and fall back to
-  `getLibraryDirectory()` / default keychain options. Never re-add `containerPath!`. Without the App
-  Group the Notification Service Extension still shows pushes but skips room name/avatar lookup.
+- **iOS App Group is optional at runtime.** `AppConfig.iosAppGroupId` (`group.pocindonesia`) must
+  match `com.apple.security.application-groups` in all three entitlements. The Dart code must keep
+  working when the App Group is missing from the applied profile: read the container via
+  `iosAppGroupContainerPath()` and fall back to `getLibraryDirectory()` / default keychain options.
+  Never re-add `containerPath!`. Without the App Group the Notification Service Extension still
+  shows pushes but skips room name/avatar lookup.
 - **Upstream endpoints are still hardcoded** and are the usual cause of "wrong environment" bugs:
   `AppConfig.homeserverList` (raw.githubusercontent FluffyChat list),
   `crashReportEndpoint = crash.fluffy.chat`, `sourceCodeUrl`, `latestReleaseApiUrl`,

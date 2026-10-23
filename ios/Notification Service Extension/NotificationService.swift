@@ -82,7 +82,7 @@ class NotificationService: UNNotificationServiceExtension {
 
         // Create database path:
         guard let containerPath = FileManager.default.containerURL(
-                forSecurityApplicationGroupIdentifier: "group.com.pocindonesia.chat"
+                forSecurityApplicationGroupIdentifier: "group.pocindonesia"
             ) else {
                 os_log("[FluffyChatPushHelper] Unable to get container path!")
                 contentHandler(bestAttemptContent)
@@ -165,7 +165,7 @@ class NotificationService: UNNotificationServiceExtension {
             kSecAttrService as String: "flutter_secure_storage_service",
             kSecAttrAccount as String: "database_password",
             kSecReturnData as String: true,
-            kSecAttrAccessGroup as String: "group.com.pocindonesia.chat",
+            kSecAttrAccessGroup as String: "group.pocindonesia",
         ]
 
         var item: CFTypeRef?
