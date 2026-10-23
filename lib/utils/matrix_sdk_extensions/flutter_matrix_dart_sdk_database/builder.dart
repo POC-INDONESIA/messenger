@@ -13,10 +13,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:matrix/matrix.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:path_provider_foundation/path_provider_foundation.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:universal_html/html.dart' as html;
 
+import 'app_group.dart';
 import 'cipher.dart';
 
 Future<DatabaseApi> flutterMatrixSdkDatabaseBuilder(String clientName) async {
@@ -53,10 +53,10 @@ Future<Directory?> getFileStorageLocation() async {
   try {
     late final Directory temporaryDirectory;
     if (PlatformInfos.isIOS) {
-      final containerPath = await PathProviderFoundation().getContainerPath(
-        appGroupIdentifier: 'group.com.pocindonesia.chat',
-      );
-      temporaryDirectory = Directory(containerPath!);
+      final containerPath = await iosAppGroupContainerPath();
+      temporaryDirectory = containerPath == null
+          ? await getTemporaryDirectory()
+          : Directory(containerPath);
     } else if (PlatformInfos.isLinux) {
       temporaryDirectory = await getApplicationCacheDirectory();
     } else {
@@ -79,7 +79,8 @@ Future<MatrixSdkDatabase> _constructDatabase(String clientName) async {
     return await MatrixSdkDatabase.init(clientName);
   }
 
-  final cipher = await getDatabaseCipher();
+  final secureStorageOptions = await iosSecureStorageOptions();
+  final cipher = await getDatabaseCipher(iOptions: secureStorageOptions);
 
   final fileStorageLocation = await getFileStorageLocation();
 
@@ -119,7 +120,7 @@ Future<MatrixSdkDatabase> _constructDatabase(String clientName) async {
     database = await openDatabase(path, options: openDatabaseOptions);
   }
 
-  final secureStorage = FlutterSecureStorage(iOptions: iosOptions);
+  final secureStorage = FlutterSecureStorage(iOptions: secureStorageOptions);
 
   return await MatrixSdkDatabase.init(
     clientName,
@@ -137,9 +138,7 @@ Future<MatrixSdkDatabase> _constructDatabase(String clientName) async {
 
 Future<String> _getDatabaseDirectory() async {
   if (PlatformInfos.isIOS) {
-    final containerPath = await PathProviderFoundation().getContainerPath(
-      appGroupIdentifier: 'group.com.pocindonesia.chat',
-    );
+    final containerPath = await iosAppGroupContainerPath();
     if (containerPath == null) {
       Logs().w('No container path found for iOS app!');
       return (await getLibraryDirectory()).path;

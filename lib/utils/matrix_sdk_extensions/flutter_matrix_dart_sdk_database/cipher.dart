@@ -6,6 +6,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:fluffychat/config/app_config.dart';
 import 'package:fluffychat/config/setting_keys.dart';
 import 'package:fluffychat/l10n/l10n.dart';
 import 'package:fluffychat/utils/client_manager.dart';
@@ -15,33 +16,45 @@ import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:matrix/matrix.dart';
 
+import 'app_group.dart';
+
 const _passwordStorageKey = 'database_password';
 
-const iosOptions = IOSOptions(
-  groupId: 'group.com.pocindonesia.chat',
+const _appGroupIosOptions = IOSOptions(
+  groupId: AppConfig.iosAppGroupId,
   accessibility: .first_unlock,
 );
 
-Future<String?> getDatabaseCipher() async {
+const _defaultIosOptions = IOSOptions(accessibility: .first_unlock);
+
+Future<IOSOptions> iosSecureStorageOptions() async {
+  if (!PlatformInfos.isIOS) return _appGroupIosOptions;
+  return await iosAppGroupContainerPath() == null
+      ? _defaultIosOptions
+      : _appGroupIosOptions;
+}
+
+Future<String?> getDatabaseCipher({IOSOptions? iOptions}) async {
   String? password;
+  final options = iOptions ?? await iosSecureStorageOptions();
 
   try {
     password = await FlutterSecureStorage(
-      iOptions: iosOptions,
-    ).read(key: _passwordStorageKey, iOptions: iosOptions);
+      iOptions: options,
+    ).read(key: _passwordStorageKey, iOptions: options);
     if (password != null) return password;
 
-    if (PlatformInfos.isIOS) {
+    if (PlatformInfos.isIOS && options.groupId != null) {
       final legacyPassword = await FlutterSecureStorage().read(
         key: _passwordStorageKey,
       );
       if (legacyPassword != null) {
         Logs().i('Migrate database key location on iOS...');
         await FlutterSecureStorage().delete(key: _passwordStorageKey);
-        await FlutterSecureStorage(iOptions: iosOptions).write(
+        await FlutterSecureStorage(iOptions: options).write(
           key: _passwordStorageKey,
           value: legacyPassword,
-          iOptions: iosOptions,
+          iOptions: options,
         );
         return legacyPassword;
       }
@@ -52,24 +65,24 @@ Future<String?> getDatabaseCipher() async {
     list.setAll(0, Iterable.generate(list.length, (i) => rng.nextInt(256)));
     final newPassword = base64UrlEncode(list);
     await FlutterSecureStorage(
-      iOptions: iosOptions,
-    ).write(key: _passwordStorageKey, value: newPassword, iOptions: iosOptions);
+      iOptions: options,
+    ).write(key: _passwordStorageKey, value: newPassword, iOptions: options);
     // workaround for if we just wrote to the key and it still doesn't exist
     password = await FlutterSecureStorage(
-      iOptions: iosOptions,
-    ).read(key: _passwordStorageKey, iOptions: iosOptions);
+      iOptions: options,
+    ).read(key: _passwordStorageKey, iOptions: options);
     if (password == null) throw MissingPluginException();
     return password;
   } on MissingPluginException catch (e) {
     FlutterSecureStorage(
-      iOptions: iosOptions,
-    ).delete(key: _passwordStorageKey, iOptions: iosOptions).catchError((_) {});
+      iOptions: options,
+    ).delete(key: _passwordStorageKey, iOptions: options).catchError((_) {});
     Logs().w('Database encryption is not supported on this platform', e);
     _sendNoEncryptionWarning(e);
   } catch (e, s) {
     FlutterSecureStorage(
-      iOptions: iosOptions,
-    ).delete(key: _passwordStorageKey, iOptions: iosOptions).catchError((_) {});
+      iOptions: options,
+    ).delete(key: _passwordStorageKey, iOptions: options).catchError((_) {});
     Logs().w('Unable to init database encryption', e, s);
     _sendNoEncryptionWarning(e);
   }

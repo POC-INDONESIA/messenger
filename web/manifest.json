@@ -1,11 +1,16 @@
 {
+<<<<<<< HEAD
     "name": "POC INDONESIA MESSENGER",
     "short_name": "POC INDONESIA MESSENGER",
+=======
+    "name": "POCIND MESSENGER",
+    "short_name": "POCIND MESSENGER",
+>>>>>>> 4f6adf28d (fix  itu)
     "start_url": ".",
     "display": "standalone",
     "background_color": "#FFFFFF",
     "theme_color": "#41a2bc",
-    "description": "The cutest messenger in the Matrix network",
+    "description": "Komunikasi melalui aplikasi POCIND MESSENGER tidak dienkripsi, semua percakapan dapat diaudit atau disadap. Aplikasi hanya digunakan untuk komunikasi komunitas, gunakan dengan bijak. POCIND MESSENGER adalah modifikasi dari FluffyChat dengan [MATRIX] server",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
