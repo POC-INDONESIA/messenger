@@ -44,24 +44,29 @@ android {
         isCoreLibraryDesugaringEnabled = true
     }
 
-    signingConfigs {
-       create("release") {
-            keyAlias = "dummyAlias"
-            keyPassword = "dummyPassword"
-            storeFile = file("dummy.keystore")
-            storePassword = "dummyStorePassword"
-        }
+    val keystorePropertiesFile = rootProject.file("key.properties")
+    val hasReleaseKeystore = keystorePropertiesFile.exists()
+    val buildsRelease = gradle.startParameter.taskNames.any {
+        it.contains("release", ignoreCase = true)
     }
 
-    val keystoreProperties = Properties()
-    val keystorePropertiesFile = rootProject.file("key.properties")
-    if (keystorePropertiesFile.exists()) {
-        keystoreProperties.load(FileInputStream(keystorePropertiesFile))
-        signingConfigs.getByName("release").apply {
-            keyAlias = keystoreProperties["keyAlias"] as String
-            keyPassword = keystoreProperties["keyPassword"] as String
-            storeFile = keystoreProperties["storeFile"]?.let { file(it) }
-            storePassword = keystoreProperties["storePassword"] as String
+    if (!hasReleaseKeystore && buildsRelease) {
+        throw GradleException(
+            "Missing android/key.properties for release signing. Create it next to " +
+                "android/settings.gradle.kts with storePassword, keyPassword, keyAlias and storeFile."
+        )
+    }
+
+    signingConfigs {
+        if (hasReleaseKeystore) {
+            create("release") {
+                val keystoreProperties = Properties()
+                keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+                keyAlias = keystoreProperties["keyAlias"] as String
+                keyPassword = keystoreProperties["keyPassword"] as String
+                storeFile = keystoreProperties["storeFile"]?.let { file(it) }
+                storePassword = keystoreProperties["storePassword"] as String
+            }
         }
     }
 
@@ -78,7 +83,7 @@ android {
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("release")
+            signingConfigs.findByName("release")?.let { signingConfig = it }
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
