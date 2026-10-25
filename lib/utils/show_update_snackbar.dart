@@ -105,7 +105,7 @@ abstract class UpdateNotifier {
               constraints: const BoxConstraints(maxWidth: 256),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(AppConfig.borderRadius / 2),
-                child: Image.asset('assets/logo/mini/banner.png'),
+                child: Image.asset('assets/logo/mini/logo_mini.png'),
               ),
             ),
             content: ConstrainedBox(

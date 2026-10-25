@@ -11,4 +11,4 @@ PRODUCT_NAME = POCIND MESSENGER
 PRODUCT_BUNDLE_IDENTIFIER = com.pocindonesia.chat
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 FluffyChat authors. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2026 POCIND Indonesia. Berdasarkan FluffyChat (AGPL-3.0-or-later).

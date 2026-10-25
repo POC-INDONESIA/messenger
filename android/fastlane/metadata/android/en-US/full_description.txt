@@ -1,31 +1,34 @@
-<b>Messaging how it should be</b>
+<b>POCIND MESSENGER</b>
 
-Whether for your friends, your company or local community, FluffyChat supports a variety of features to cover all your daily needs.
+Aplikasi komunikasi komunitas POCIND Indonesia yang terhubung ke homeserver Matrix
+matrix.pocindonesia.com.
 
-<b>Easy to use</b>
+<b>Chat dan grup</b>
 
-Simply install, log in and start chatting. The intuitive user interface makes secure communication as easy as possible.
+Kirim pesan, foto, dokumen, pesan suara, dan lokasi. Buat grup tak terbatas untuk
+komunitas, kegiatan, dan koordinasi sehari-hari.
 
-<b>Secure</b>
+<b>Panggilan</b>
 
-With olm/megolm end-to-end encryption, encrypted message backups and an automated key trust system, FluffyChat is among the most secure messengers available.
+Panggilan suara dan video langsung antar anggota.
 
-<b>Decentral</b>
+<b>Berbasis Matrix</b>
 
-Based on the open Matrix protocol we build a decentralized messaging network together, which no entity can control. Host your own chat server while remaining in contact with everyone.
+Menggunakan protokol terbuka Matrix, sehingga tetap dapat berkomunikasi dengan
+pengguna klien Matrix lain.
 
-<b>Feature rich and reliable</b>
+<b>Tanpa iklan dan tanpa pelacakan</b>
 
-From public chats with tens of thousands of participants and polls to custom stickers, spaces, rich moderation tools, and multi-device support, FluffyChat delivers a comprehensive communication suite.
+Tidak ada iklan, analytics, atau pelacakan pihak ketiga.
 
-<b>Secure video calls</b>
+<b>Catatan penting</b>
 
-Direct calls and video conferences, fully secured with Matrix RTC-compatible encryption.
+Percakapan pada aplikasi ini tidak dienkripsi end-to-end, sehingga isi pesan dapat
+dibaca oleh pengelola server untuk keperluan audit komunitas. Jangan gunakan untuk
+data rahasia atau sensitif.
 
-<b>Not another walled garden</b>
+<b>Open source</b>
 
-We do not build another walled garden! FluffyChat is fully compatible with any other Matrix client like Element, Nheko, Cinny or NeoChat. Learn more at matrix.org.
-
-<b>Made by volunteers</b>
-
-FluffyChat is a non-profit project based on open standards and driven entirely by volunteers. Infrastructure is funded by donations, and participation is open to everyone.
+POCIND MESSENGER adalah perangkat lunak bebas berlisensi AGPL-3.0-or-later dan
+merupakan modifikasi dari FluffyChat. Kode sumber tersedia di
+https://github.com/POC-INDONESIA/messenger

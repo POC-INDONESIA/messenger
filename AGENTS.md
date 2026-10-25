@@ -102,13 +102,17 @@ Entry point `lib/main.dart` → `ClientManager.getClients()` → `FluffyChatApp`
   `iosAppGroupContainerPath()` and fall back to `getLibraryDirectory()` / default keychain options.
   Never re-add `containerPath!`. Without the App Group the Notification Service Extension still
   shows pushes but skips room name/avatar lookup.
-- **Upstream endpoints are still hardcoded** and are the usual cause of "wrong environment" bugs:
-  `AppConfig.homeserverList` (raw.githubusercontent FluffyChat list),
-  `crashReportEndpoint = crash.fluffy.chat`, `sourceCodeUrl`, `latestReleaseApiUrl`,
-  `changelogUrl`, and `AppSettings.pushNotificationsGatewayUrl = push.fluffychat.im`,
-  `website` / `privacyPolicy` / `tos` / `logoUrl` = fluffychat.im. `recommended_homeservers.json`
-  in this repo is **not read at runtime**.
-- **Branding gaps**: `web/index.html`, `web/manifest.json` still say FluffyChat.
+- **Semua endpoint sudah milik POCIND**: `sourceCodeUrl`, `supportUrl`, `newIssueUrl`,
+  `latestReleaseApiUrl`, `changelogUrl`, `helpUrl`, `homeserverList` dan `AppSettings.website` /
+  `privacyPolicy` / `tos` / `logoUrl` mengarah ke `github.com/POC-INDONESIA/messenger`
+  (repo masih privat sampai rilis). `crashReportEndpoint` (crash.fluffy.chat) sudah dihapus,
+  `fallbackLiveKitInstance` dikosongkan, dan `pushNotificationsGatewayUrl` memakai homeserver
+  POCIND. `recommended_homeservers.json` dibaca lewat `AppConfig.homeserverList` dan hanya
+  berisi homeserver POCIND. Jangan menambahkan kembali endpoint milik proyek FluffyChat.
+  Sisa tautan ke FluffyChat (ko-fi/liberapay, tutorial, issue upstream di komentar kode)
+  dipertahankan sengaja sebagai atribusi.
+- **Branding**: nama aplikasi "POCIND MESSENGER" ada di `AndroidManifest.xml`, `Info.plist`,
+  `web/index.html`, `web/manifest.json`, fastlane, snap, dan metadata macOS/Windows.
   Kotlin sources live under the old path `android/app/src/main/kotlin/chat/fluffy/fluffychat/`
   but declare `package com.pocindonesia.chat` — scripts referencing the old path break.
 

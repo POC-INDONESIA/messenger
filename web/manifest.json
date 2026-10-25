@@ -1,11 +1,6 @@
 {
-<<<<<<< HEAD
-    "name": "POC INDONESIA MESSENGER",
-    "short_name": "POC INDONESIA MESSENGER",
-=======
     "name": "POCIND MESSENGER",
     "short_name": "POCIND MESSENGER",
->>>>>>> 4f6adf28d (fix  itu)
     "start_url": ".",
     "display": "standalone",
     "background_color": "#FFFFFF",

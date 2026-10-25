@@ -1,11 +1,40 @@
 <!--
 SPDX-FileCopyrightText: 2019-Present Christian Kußowski
 SPDX-FileCopyrightText: 2019-Present Contributors to FluffyChat
+SPDX-FileCopyrightText: 2026-Present POCIND MESSENGER contributors
 
 SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+# POCIND MESSENGER
+
+**POCIND MESSENGER** adalah klien Matrix buatan POCIND Indonesia yang terhubung ke
+homeserver `matrix.pocindonesia.com`. Aplikasi ini adalah **versi modifikasi (fork)
+dari [FluffyChat](https://fluffy.chat) 2.11.0** karya Christian Kußowski dan para
+kontributor FluffyChat, dan **tidak berafiliasi dengan maupun didukung oleh** proyek
+FluffyChat.
+
+Perubahan utama dibanding FluffyChat:
+
+- rebranding nama, ikon, warna, dan skema tautan (`im.pocindchat` / `im.pocindchat.auth`);
+- homeserver preset `matrix.pocindonesia.com` sehingga pemilih homeserver dilewati;
+- enkripsi end-to-end dinonaktifkan di sisi aplikasi;
+- penyesuaian notifikasi push (termasuk Notification Service Extension iOS).
+
+FluffyChat dilisensikan di bawah **GNU Affero General Public License v3.0 atau
+lebih baru (AGPL-3.0-or-later)**, sehingga POCIND MESSENGER juga didistribusikan
+dengan lisensi yang sama. Teks lisensi lengkap ada di [LICENSE](LICENSE), dan kode
+sumber versi modifikasi ini tersedia di
+<https://github.com/POC-INDONESIA/messenger>. Kebijakan privasi ada di
+[PRIVACY.md](PRIVACY.md) dan ketentuan penggunaan di [TERMS.md](TERMS.md).
+
+## Upstream: FluffyChat
+
 [FluffyChat](https://fluffy.chat) is an open source, nonprofit and cute [[matrix](https://matrix.org)] client written in [Flutter](https://flutter.dev). The goal of the app is to create an easy to use instant messenger which is open source and accessible for everyone.
+
+Terima kasih kepada Christian Kußowski dan seluruh kontributor FluffyChat atas
+karya aslinya. Dukungan untuk pengembang asli tetap dapat diberikan melalui
+tautan di bawah ini.
 
 ### Links:
 
@@ -43,9 +72,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 # Installation
 
-Please visit the website for installation instructions:
-
-- https://fluffy.chat
+POCIND MESSENGER didistribusikan untuk pengguna POCIND Indonesia. Untuk memasang
+versi ini, gunakan berkas rilis dari repositori ini atau bangun sendiri dari kode
+sumber seperti dijelaskan di bawah.
 
 # Configuration and Mobile Device Management (MDM)
 
@@ -54,12 +83,12 @@ An example configuration can be found in the `config.sample.json` file.
 
 # How to build
 
-1. To build FluffyChat you need [Flutter](https://flutter.dev) and [Rust](https://www.rust-lang.org/tools/install)
+1. To build POCIND MESSENGER you need [Flutter](https://flutter.dev) and [Rust](https://www.rust-lang.org/tools/install)
 
-2. Clone the repo:
+2. Clone this repository:
 ```
-git clone https://github.com/krille-chan/fluffychat.git
-cd fluffychat
+git clone https://github.com/POC-INDONESIA/messenger.git
+cd messenger
 ```
 3. Choose your target platform below and enable support for it.
 3.1 If you want, enable Googles Firebase Cloud Messaging:

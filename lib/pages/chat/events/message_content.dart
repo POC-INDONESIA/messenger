@@ -15,6 +15,7 @@ import 'package:matrix/matrix.dart';
 
 import '../../../config/app_config.dart';
 import '../../../utils/event_checkbox_extension.dart';
+import '../../../utils/markdown.dart';
 import '../../../utils/platform_infos.dart';
 import '../../../utils/url_launcher.dart';
 import 'audio_player.dart';
@@ -168,9 +169,14 @@ class MessageContent extends StatelessWidget {
                 fontSize: fontSize,
               );
             }
-            var html = AppSettings.renderHtml.value && event.isRichMessage
-                ? event.formattedText
-                : event.body.replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+            var html = event.body
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;');
+            if (AppSettings.renderHtml.value) {
+              html = event.isRichMessage
+                  ? event.formattedText
+                  : markdownToHtml(event.body);
+            }
             if (event.messageType == MessageTypes.Emote) {
               html = '* $html';
             }

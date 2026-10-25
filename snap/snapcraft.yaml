@@ -3,47 +3,33 @@ title: POCIND MESSENGER
 base: core24
 adopt-info: fluffychat
 license: AGPL-3.0
-summary: Komunikasi melalui aplikasi POCIND MESSENGER tidak dienkripsi, semua percakapan dapat diaudit atau disadap. Aplikasi hanya digunakan untuk komunikasi komunitas, gunakan dengan bijak. POCIND MESSENGER adalah modifikasi dari FluffyChat dengan [MATRIX] server
+summary: Aplikasi komunitas POCIND Indonesia di jaringan Matrix
 description: |
-  ## Your communication should be yours.
+  ## POCIND MESSENGER
 
-  The open-source, non-profit European alternative to big tech’s messaging and video-call monopoly. End-to-end encrypted, decentralized, and easy to use for everyone.
+  Aplikasi komunikasi komunitas POCIND Indonesia yang terhubung ke homeserver
+  Matrix matrix.pocindonesia.com.
 
-  ### Messaging how it should be
+  ### Chat dan grup
 
-  Whether for your friends, your company or local community, POCIND MESSENGER supports a variety of features to cover all your daily needs.
+  Kirim pesan, foto, dokumen, pesan suara, dan lokasi. Buat grup untuk komunitas,
+  kegiatan, dan koordinasi sehari-hari.
 
-  #### Easy to use
+  ### Berbasis Matrix
 
-  Simply install, log in and start chatting. The intuitive user interface makes secure communication as easy as possible.
+  Menggunakan protokol terbuka Matrix, sehingga tetap dapat berkomunikasi dengan
+  pengguna klien Matrix lain.
 
-  #### Secure
+  ### Catatan penting
 
-  With olm/megolm end-to-end encryption, encrypted message backups and an automated key trust system, POCIND MESSENGER is among the most secure messengers available.
+  Percakapan tidak dienkripsi end-to-end, sehingga isi pesan dapat dibaca oleh
+  pengelola server untuk keperluan audit komunitas.
 
-  #### Decentral
+  ### Open source
 
-  Based on the open Matrix protocol we build a decentralized messaging network together, which no entity can control. Host your own chat server while remaining in contact with everyone using POCIND MESSENGER.
-
-  ### Feature rich and reliable
-
-  From public chats with tens of thousands of participants and polls to custom stickers, spaces, rich moderation tools, and multi-device support, POCIND MESSENGER delivers a comprehensive communication suite.
-
-  #### Secure video calls
-
-  Direct calls and video conferences, fully secured with Matrix RTC-compatible encryption.
-
-  #### Not another walled garden
-
-  We do not build another walled garden! POCIND MESSENGER is fully compatible with any other Matrix client like Element, Nheko, Cinny or NeoChat. Learn more at matrix.org.
-
-  #### Made by volunteers
-
-  POCIND MESSENGER is a non-profit project based on open standards and driven entirely by volunteers. Infrastructure is funded by donations, and participation is open to everyone.
-
-  Join the community: https://matrix.to/#/#pocind-space:matrix.org
-  Website: http://pocind-messenger.im
-  Microblog: https://troet.cafe/@pocind
+  POCIND MESSENGER adalah perangkat lunak bebas berlisensi AGPL-3.0-or-later dan
+  merupakan modifikasi dari FluffyChat. Kode sumber tersedia di
+  https://github.com/POC-INDONESIA/messenger
 
 grade: stable
 confinement: strict

@@ -103,6 +103,10 @@ abstract class PlatformInfos {
         ),
       ),
       applicationName: AppSettings.applicationName.value,
+      applicationLegalese:
+          '© POCIND Indonesia\n'
+          'Modifikasi FluffyChat karya Christian Kußowski dan kontributor, '
+          'lisensi AGPL-3.0-or-later',
     );
   }
 }

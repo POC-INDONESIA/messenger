@@ -15,6 +15,7 @@ import 'package:fluffychat/utils/notification_background_handler.dart';
 import 'package:fluffychat/utils/platform_infos.dart';
 import 'package:fluffychat/utils/start_push_foreground_service.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_vodozemac/flutter_vodozemac.dart' as vod;
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
@@ -63,6 +64,11 @@ void main(List<String> args) => runZonedGuarded(() async {
   // To make sure that the parts of flutter needed are started up already, we need to ensure that the
   // widget bindings are initialized already.
   WidgetsFlutterBinding.ensureInitialized();
+
+  LicenseRegistry.addLicense(() async* {
+    final license = await rootBundle.loadString('LICENSE');
+    yield LicenseEntryWithLineBreaks(['POCIND MESSENGER'], license);
+  });
 
   final store = await AppSettings.init();
   Logs().i('Welcome to ${AppSettings.applicationName.value} <3');

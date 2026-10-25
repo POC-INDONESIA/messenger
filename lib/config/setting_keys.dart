@@ -53,24 +53,36 @@ enum AppSettings<T> {
   displayChatDetailsColumn('chat.fluffy.display_chat_details_column', false),
   // AppConfig-mirrored settings
   applicationName<String>('chat.fluffy.application_name', 'POCIND MESSENGER'),
-  defaultHomeserver<String>('chat.fluffy.default_homeserver', 'matrix.pocindonesia.com'),
+  defaultHomeserver<String>(
+    'chat.fluffy.default_homeserver',
+    'matrix.pocindonesia.com',
+  ),
   // colorSchemeSeed stored as ARGB int
   colorSchemeSeedInt<int>('chat.fluffy.color_scheme_seed', 0xFF5625BA),
   emojiSuggestionLocale<String>('emoji_suggestion_locale', ''),
   enableSoftLogout<bool>('chat.fluffy.enable_soft_logout', true),
   enableMatrixNativeOIDC<bool>('chat.fluffy.enable_matrix_native_oidc', true),
-  presetHomeserver<String>('chat.fluffy.preset_homeserver', 'matrix.pocindonesia.com'),
+  presetHomeserver<String>(
+    'chat.fluffy.preset_homeserver',
+    'matrix.pocindonesia.com',
+  ),
   welcomeText<String>('chat.fluffy.welcome_text', ''),
-  website<String>('chat.fluffy.website_url', 'https://fluffychat.im'),
+  website<String>(
+    'chat.fluffy.website_url',
+    'https://github.com/POC-INDONESIA/messenger',
+  ),
   logoUrl<String>(
     'chat.fluffy.logo_url',
-    'https://fluffychat.im/assets/favicon.png',
+    'https://raw.githubusercontent.com/POC-INDONESIA/messenger/main/assets/logo/mini/logo_mini.png',
   ),
   privacyPolicy<String>(
     'chat.fluffy.privacy_policy_url',
-    'https://fluffychat.im/privacy',
+    'https://github.com/POC-INDONESIA/messenger/blob/main/PRIVACY.md',
   ),
-  tos<String>('chat.fluffy.tos_url', 'https://fluffychat.im/tos'),
+  tos<String>(
+    'chat.fluffy.tos_url',
+    'https://github.com/POC-INDONESIA/messenger/blob/main/TERMS.md',
+  ),
   sendTimelineEventTimeout<int>('chat.fluffy.send_timeline_event_timeout', 15),
   webNotificationSound<bool>('chat.fluffy.web_notification_sound', true),
   chatFilter<String>('chat.fluffy.chat_filter', 'allChats'),
@@ -83,10 +95,7 @@ enum AppSettings<T> {
   knownErrorHashes<List<String>>('chat.fluffy.known_crash_hashes', []),
   checkForUpdates<bool>('chat.fluffy.check_for_updates', true),
   lastUpdateCheckDate<String>('chat.fluffy.last_update_check_date', ''),
-  fallbackLiveKitInstance<String>(
-    'chat.fluffy.fallback_live_kit_instance',
-    'https://livekit-jwt.fluffy.chat',
-  );
+  fallbackLiveKitInstance<String>('chat.fluffy.fallback_live_kit_instance', '');
 
   final String key;
   final T _defaultValue;
