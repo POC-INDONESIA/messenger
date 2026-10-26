@@ -12,6 +12,7 @@ import 'package:fluffychat/utils/client_manager.dart';
 import 'package:fluffychat/utils/init_with_restore.dart';
 import 'package:fluffychat/utils/matrix_sdk_extensions/matrix_file_extension.dart';
 import 'package:fluffychat/utils/notification_background_handler.dart';
+import 'package:fluffychat/utils/notification_room_cache.dart';
 import 'package:fluffychat/utils/platform_infos.dart';
 import 'package:fluffychat/utils/uia_request_manager.dart';
 import 'package:fluffychat/widgets/adaptive_dialogs/show_ok_cancel_alert_dialog.dart';
@@ -363,6 +364,9 @@ class MatrixState extends State<Matrix> {
       backgroundPush?.openRoomFromNotification(newActivity: true);
     }
     final foreground = state == AppLifecycleState.resumed;
+    if (PlatformInfos.isIOS) {
+      unawaited(updateNotificationRoomCache(widget.clients));
+    }
     for (final client in widget.clients) {
       client.syncPresence = state == AppLifecycleState.resumed
           ? null

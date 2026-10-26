@@ -102,6 +102,11 @@ Entry point `lib/main.dart` → `ClientManager.getClients()` → `FluffyChatApp`
   `iosAppGroupContainerPath()` and fall back to `getLibraryDirectory()` / default keychain options.
   Never re-add `containerPath!`. Without the App Group the Notification Service Extension still
   shows pushes but skips room name/avatar lookup.
+- **The SQLite/SQLCipher database must stay in the app's private container** (`getLibraryDirectory()`),
+  never in the App Group. iOS kills apps that are suspended while holding a lock on a database in a
+  shared container (`RUNNINGBOARD 0xdead10cc`). The Notification Service Extension therefore reads
+  room names/avatars from `notification_rooms.json`, which `updateNotificationRoomCache()` writes to
+  the App Group (called from `MatrixState.didChangeAppLifecycleState`).
 - **Semua endpoint sudah milik POCIND**: `sourceCodeUrl`, `supportUrl`, `newIssueUrl`,
   `latestReleaseApiUrl`, `changelogUrl`, `helpUrl`, `homeserverList` dan `AppSettings.website` /
   `privacyPolicy` / `tos` / `logoUrl` mengarah ke `github.com/POC-INDONESIA/messenger`
@@ -149,3 +154,8 @@ Do not hardcode usernames, passwords, or tokens in these files, and do not add a
   while the project uses `package:fluffychat/l10n/l10n.dart`. Fix the script before using it.
 - `dart_dependency_validator.yaml` intentionally ignores `handy_window`,
   `media_kit_libs_linux`, `media_kit_libs_windows_audio` — do not remove those ignores.
+- `third_party/swipe_to_action` is a vendored copy of the unmaintained `swipe_to_action` 0.3.0,
+  wired up through `dependency_overrides` in `pubspec.yaml`. The only change is a `mounted` guard
+  before `setState()` in the post-frame callback (`lib/src/swipeable.dart`), which otherwise throws
+  "Null check operator used on a null value" when a message is disposed before the next frame.
+  Drop the override once upstream publishes a fix.

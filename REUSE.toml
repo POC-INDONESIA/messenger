@@ -62,3 +62,10 @@ path = [
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2017-Present Fabiyamada"
 SPDX-License-Identifier = "CC-BY-4.0"
+
+# Vendored dependency
+[[annotations]]
+path = ["third_party/swipe_to_action/**"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = ["2020 Inex Code", "2026-Present POCIND MESSENGER contributors"]
+SPDX-License-Identifier = "MIT"

@@ -145,3 +145,10 @@ flutter_launcher_icons:
 # 2. Always link an (upstream?) issue
 # 3. Explain how and when this can be removed (overrides must be temporarily)
 dependency_overrides:
+  # swipe_to_action 0.3.0 is the latest release and unmaintained. Its
+  # Swipeable calls setState() from a post-frame callback without checking
+  # `mounted`, which throws "Null check operator used on a null value" when the
+  # message is disposed before the next frame. The vendored copy only adds that
+  # guard. Remove the override once a fixed release is published.
+  swipe_to_action:
+    path: third_party/swipe_to_action

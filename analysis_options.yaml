@@ -44,6 +44,7 @@ analyzer:
     todo: ignore
   exclude:
     - lib/l10n/*.dart
+    - third_party/**
     - build/**
     - android/**
     - ios/**

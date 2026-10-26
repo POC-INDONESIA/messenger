@@ -80,54 +80,31 @@ class NotificationService: UNNotificationServiceExtension {
 
         bestAttemptContent.threadIdentifier = "\(clientName)_\(roomId)"
 
-        // Create database path:
-        guard let containerPath = FileManager.default.containerURL(
+        // Room names and avatars are cached in the App Group by the app.
+        // The database itself is never shared with this extension, because iOS
+        // terminates apps which are suspended while holding a lock on a shared
+        // database (RUNNINGBOARD 0xdead10cc).
+        guard
+            let containerPath = FileManager.default.containerURL(
                 forSecurityApplicationGroupIdentifier: "group.pocindonesia"
-            ) else {
-                os_log("[FluffyChatPushHelper] Unable to get container path!")
-                contentHandler(bestAttemptContent)
-                return
-        }
-        let databasePath = containerPath.appendingPathComponent("\(clientName).sqlite").path
-
-        // Open database:
-        let database: SqlCipherDatabase
-        do {
-            database = try getDatabase(path: databasePath)
-        } catch {
-            os_log("[FluffyChatPushHelper] Unable to open database: %{public}@", type: .error, String(describing: error))
-            bestAttemptContent.userInfo["error"] = String(describing: error)
+            )
+        else {
+            os_log("[FluffyChatPushHelper] Unable to get container path!")
             contentHandler(bestAttemptContent)
             return
         }
 
-        // Get room name:
-        var roomName = getRoomNameFromDatabase(
-            database: database,
+        let cachedRoom = loadCachedRoom(
+            containerPath: containerPath,
             roomId: roomId
         )
-        var roomAvatarUrl = getRoomAvatarFromDatabase(database: database, roomId: roomId)
 
-        // Fall back to room heroes if no explicit room name
-        if roomName == nil || roomAvatarUrl == nil {
-            if let heroes = getRoomheroesFromDatabase(
-                database: database,
-                roomId: roomId
-            ) {
-                if !heroes.isEmpty {
-                    roomName =
-                        roomName
-                        ?? heroes.map { hero in
-                            hero.content.displayname
-                                ?? String(localized: "FluffyChat User")
-                        }.joined(separator: ", ")
-                    roomAvatarUrl = roomAvatarUrl ?? heroes.first?.content.avatar_url
-                } else {
-                    roomName = roomName ?? String(localized: "Empty chat")
-                }
-            } else {
-                roomName = roomName ?? String(localized: "New chat")
-            }
+        var roomName = bestAttemptContent.userInfo["room_name"] as? String
+        if roomName?.isEmpty ?? true {
+            roomName = cachedRoom?.name
+        }
+        if roomName?.isEmpty ?? true {
+            roomName = String(localized: "New chat")
         }
 
         if let roomName = roomName {
@@ -135,10 +112,13 @@ class NotificationService: UNNotificationServiceExtension {
             bestAttemptContent.userInfo["room_name"] = roomName
         }
 
-        if let roomAvatarUrl = roomAvatarUrl {
+        if let roomAvatarUrl = cachedRoom?.avatar, !roomAvatarUrl.isEmpty {
             bestAttemptContent.userInfo["room_avatar"] = roomAvatarUrl
             do {
-                let attachment = try downloadAttachment(url: roomAvatarUrl, containerPath: containerPath)
+                let attachment = try downloadAttachment(
+                    url: roomAvatarUrl,
+                    containerPath: containerPath
+                )
                 bestAttemptContent.attachments = [attachment]
             } catch {
                 os_log("[FluffyChatPushHelper] Unable to download avatar!")
@@ -158,117 +138,15 @@ class NotificationService: UNNotificationServiceExtension {
         }
     }
 
-    func getDatabase(path: String) throws -> SqlCipherDatabase {
-        // Fetch database key
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: "flutter_secure_storage_service",
-            kSecAttrAccount as String: "database_password",
-            kSecReturnData as String: true,
-            kSecAttrAccessGroup as String: "group.pocindonesia",
-        ]
-
-        var item: CFTypeRef?
-        let status = SecItemCopyMatching(query as CFDictionary, &item)
-
-        guard status == errSecSuccess,
-            let data = item as? Data,
-            let key = String(data: data, encoding: .utf8)
+    func loadCachedRoom(containerPath: URL, roomId: String) -> NotificationRoomCache.CachedRoom? {
+        let cachePath = containerPath.appendingPathComponent("notification_rooms.json")
+        guard
+            let data = try? Data(contentsOf: cachePath),
+            let cache = try? JSONDecoder().decode(NotificationRoomCache.self, from: data)
         else {
-            throw DatabaseKeyError.keychain(status)
-        }
-
-        return try SqlCipherDatabase.open(path: path, key: key)
-    }
-
-    func getUserFromDatabase(
-        database: SqlCipherDatabase,
-        userId: String,
-        roomId: String
-    ) -> UserEventJson? {
-        let roomMemberDatabaseKey = [roomId, userId].joined(separator: "|")
-        guard let event = try? database.scalar(
-            query: "SELECT v FROM box_room_members WHERE k=?",
-            args: [roomMemberDatabaseKey]
-        ) else {
             return nil
         }
-        return try? JSONDecoder().decode(
-            UserEventJson.self,
-            from: Data(event.utf8),
-        )
-    }
-
-    func getRoomAvatarFromDatabase(database: SqlCipherDatabase, roomId: String)
-        -> String?
-    {
-        // Database key format: "roomId|eventType|stateKey"
-        let roomAvatarDatabaseKey = [roomId, "m.room.avatar", ""].joined(
-            separator: "|"
-        )
-        guard let event = try? database.scalar(
-            query: "SELECT v FROM box_preload_room_states WHERE k=?",
-            args: [roomAvatarDatabaseKey]
-        ) else {
-            return nil
-        }
-
-        let roomAvatarEvent = try? JSONDecoder().decode(
-            RoomAvatarEventJson.self,
-            from: event.data(using: .utf8)!
-        )
-        if let avatarUrl = roomAvatarEvent?.content.url, !avatarUrl.isEmpty {
-            return avatarUrl
-        }
-        return nil
-    }
-
-    func getRoomNameFromDatabase(database: SqlCipherDatabase, roomId: String)
-        -> String?
-    {
-        // Database key format: "roomId|eventType|stateKey"
-        let roomNameDatabaseKey = [roomId, "m.room.name", ""].joined(
-            separator: "|"
-        )
-        guard let event = try? database.scalar(
-            query: "SELECT v FROM box_preload_room_states WHERE k=?",
-            args: [roomNameDatabaseKey]
-        ) else {
-            return nil
-        }
-
-        let roomNameEvent = try? JSONDecoder().decode(
-            RoomNameEventJson.self,
-            from: event.data(using: .utf8)!
-        )
-        if let name = roomNameEvent?.content.name, !name.isEmpty {
-            return name
-        }
-        return nil
-    }
-
-    func getRoomheroesFromDatabase(database: SqlCipherDatabase, roomId: String)
-        -> [UserEventJson]?
-    {
-        guard let event = try? database.scalar(
-            query: "SELECT v FROM box_rooms WHERE k=?",
-            args: [roomId]
-        ) else {
-            return nil
-        }
-
-        let room = try? JSONDecoder().decode(
-            RoomJson.self,
-            from: event.data(using: .utf8)!
-        )
-        let heroes = room?.summary.heroes.map { hero in
-            return getUserFromDatabase(
-                database: database,
-                userId: hero,
-                roomId: roomId
-            )
-        }.compactMap { $0 }
-        return heroes
+        return cache.rooms[roomId]
     }
 
     func downloadAttachment(url: String, containerPath: URL) throws -> UNNotificationAttachment {
@@ -288,36 +166,12 @@ class NotificationService: UNNotificationServiceExtension {
     }
 }
 
-struct UserEventJson: Decodable {
-    struct UserEventContentJson: Decodable {
-        let displayname: String?
-        let avatar_url: String?
-    }
-    let content: UserEventContentJson
-}
-
-struct RoomNameEventJson: Decodable {
-    struct RoomNameEventContentJson: Decodable {
+struct NotificationRoomCache: Decodable {
+    struct CachedRoom: Decodable {
         let name: String?
+        let avatar: String?
     }
-    let content: RoomNameEventContentJson
-}
-
-struct RoomAvatarEventJson: Decodable {
-    struct RoomAvatarEventContentJson: Decodable {
-        let url: String?
-    }
-    let content: RoomAvatarEventContentJson
-}
-
-struct RoomJson: Decodable {
-    struct RoomSummaryJson: Decodable {
-        let heroes: [String]
-        enum CodingKeys: String, CodingKey {
-            case heroes = "m.heroes"
-        }
-    }
-    let summary: RoomSummaryJson
+    let rooms: [String: CachedRoom]
 }
 
 struct NotificationDevice: Decodable {

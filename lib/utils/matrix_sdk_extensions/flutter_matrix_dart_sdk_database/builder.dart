@@ -94,6 +94,7 @@ Future<MatrixSdkDatabase> _constructDatabase(String clientName) async {
 
   // migrate from potential previous SQLite database path to current one
   await _migrateLegacyLocation(path, clientName);
+  await _migrateFromAppGroup(path, clientName);
 
   // in case we got a cipher, we use the encryption helper
   // to manage SQLite encryption
@@ -138,12 +139,10 @@ Future<MatrixSdkDatabase> _constructDatabase(String clientName) async {
 
 Future<String> _getDatabaseDirectory() async {
   if (PlatformInfos.isIOS) {
-    final containerPath = await iosAppGroupContainerPath();
-    if (containerPath == null) {
-      Logs().w('No container path found for iOS app!');
-      return (await getLibraryDirectory()).path;
-    }
-    return containerPath;
+    // The database must never live in the App Group container. iOS kills apps
+    // which are suspended while holding a lock on a database in a shared
+    // container (RUNNINGBOARD 0xdead10cc).
+    return (await getLibraryDirectory()).path;
   }
   if (PlatformInfos.isMacOS) {
     return (await getLibraryDirectory()).path;
@@ -155,6 +154,34 @@ Future<String> _getDatabasePath(String clientName) async {
   final databaseDirectory = await _getDatabaseDirectory();
 
   return join(databaseDirectory, '$clientName.sqlite');
+}
+
+/// Moves a database which older versions kept in the App Group container into
+/// the private app container.
+Future<void> _migrateFromAppGroup(String sqlFilePath, String clientName) async {
+  if (!PlatformInfos.isIOS) return;
+  final containerPath = await iosAppGroupContainerPath();
+  if (containerPath == null) return;
+  final legacyPath = join(containerPath, '$clientName.sqlite');
+  if (legacyPath == sqlFilePath) return;
+  if (!await File(legacyPath).exists()) return;
+  if (await File(sqlFilePath).exists()) return;
+  for (final suffix in ['', '-wal', '-shm', '-journal']) {
+    final legacyFile = File('$legacyPath$suffix');
+    if (!await legacyFile.exists()) continue;
+    await legacyFile.copy('$sqlFilePath$suffix');
+  }
+  Logs().i('Migrated database out of the App Group container');
+  for (final suffix in ['', '-wal', '-shm', '-journal']) {
+    final legacyFile = File('$legacyPath$suffix');
+    if (await legacyFile.exists()) {
+      try {
+        await legacyFile.delete();
+      } catch (e, s) {
+        Logs().w('Unable to delete legacy database file', e, s);
+      }
+    }
+  }
 }
 
 Future<void> _migrateLegacyLocation(
